@@ -13,4 +13,4 @@ plot(t,Y)
 
 figure(2)
 spectrogramme(Y,2048,fs)
-title('la corde vide alto')
+title('Spectrogramme du signal')
