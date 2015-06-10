@@ -34,35 +34,31 @@ plot(freq(1:length(result)),result); % frequence
 freq_fond=251; %faut-il prendre le 440 du la auquel le piano est accorde ou le pic a 251 qui correspond a la note jouee ?
 P_str=[];
 npic=1; % numero de pic
-for fh=freq_fond:freq_fond:36*freq_fond % 36 pics pour couvrir a peu pres les 20000Hz
-% %f = (0:Nfft/2)/Nfft*Fe;
-% % indice k=f*Nfft/FÈ + 1;
-% ind=round(f1*Nfft/Fe+1); 
 
-[fpic valpic ] = cherche_pic(fh,Nfft,Fe,result);
-    % on ne veut pas tenir compte des harmoniques negatives pour le centre
-    % de gravite spectral
-if (valpic <0) 
-    valpic=0 ; 
-end
-
-freqp(npic)=fpic;
-amp(npic)=valpic;
-npic=npic+1;
-% concatener les pics et leurs frequences
-
-    P_str2=[num2str(valpic), ',', num2str(fpic)];
-    P_str=[P_str '\r\n' P_str2];
+for fh=freq_fond:freq_fond:36*freq_fond % 36 pics pour couvrir a peu pres les 25000Hz 
+  ind=round(f1*512/fs+1); 
+  tab1=zeros(1,length(result));
+  tab1(ind-20:ind+20)=result(ind-20:ind+20);
+  [valpic, indpic ]=max(tab1); % indice ou pic
+  fpic=(indpic-1)*fs/512;
+  if (valpic<0)
+   valpic=0;
+  end
+  freqp(npic)=fpic;
+  amp(npic)=valpic;
+  npic=npic+1;
+  %concatener les pics et leurs frequences
+  P_str2=[num2str(valpic), ',', num2str(fpic)];
+  P_str=[P_str '\r\n' P_str2];
 
 end
 
+% Centre de gravite
+cgravite_spectral=sum(freqp.*amp)/sum(amp);
+% calcul des tri-stimulus
+tristimulus1=amp(1)/sum(amp);% A1/sigma(Ak)
+tristimulus2=(amp(2)+amp(3)+amp(4))/sum(amp); % A2+A3+A4/sigma(Ak)
+tristimulus3=1-tristimulus1-tristimulus2; % sigma(Ak,k>4)/sigma(Ak)
 
-
-
-
-
-
-
-
-%Calcul du centre de gravité
+end
 
