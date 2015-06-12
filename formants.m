@@ -11,6 +11,7 @@ t = (0:N-1)/fs;
 figure(1)
 plot(t,Y)
 
+%Affichage du spectrogramme
 figure(2)
-spectrogramme(Y,2048,fs)
-title('Spectrogramme du signal')
+specgram(Y,2048,fs)
+title('Spectrogramme')
